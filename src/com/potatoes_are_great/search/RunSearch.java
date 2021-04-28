@@ -1,4 +1,4 @@
-package com.potatoes_are_great.inputs.search;
+package com.potatoes_are_great.search;
 
 import java.io.File;
 
