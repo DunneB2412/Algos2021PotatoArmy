@@ -1,16 +1,17 @@
 package com.potatoes_are_great.search;
 
+import com.potatoes_are_great.utill.Patterns;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Edge {
-    private static final Pattern PATTERN = Pattern.compile("(\\d+),(\\d+),(\\d),(\\d*)");
     public final Stop a, b;
     public final int type;
     public final Integer minCost;
 
     public Edge(String line) throws IllegalAccessException {
-        Matcher matcher = PATTERN.matcher(line);
+        Matcher matcher = Patterns.EDGE_PATTERN.matcher(line);
         if(!matcher.matches()){
             throw new IllegalAccessException("line <"+line+"> is not correctly formated for a transfer");
         }

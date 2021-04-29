@@ -1,12 +1,13 @@
 package com.potatoes_are_great.search;
 
+import com.potatoes_are_great.utill.Patterns;
+
 import java.io.*;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Stop {
-    private static final Pattern PATTERN = Pattern.compile("(\\d+),(\\d+),(.+),(.+),(-?\\d\\d\\d?.\\d*),(-?\\d\\d\\d?.\\d*),([A-Z][A-Z]\\s\\d\\d),(.*),(\\d),(\\d*)");
     private static final Hashtable<Integer, Stop> STOP_HASHTABLE = new Hashtable<>();
     private static boolean ready = true;
     public static boolean isReady(){
@@ -24,7 +25,7 @@ public class Stop {
                 try {
                     new Stop(line);
                 }catch (Exception ignored){
-
+                    System.out.println(line);
                 }
             }
             reader.close();
@@ -43,14 +44,15 @@ public class Stop {
     }
 
     private final int id, code;
-    private int locationType, parentStation;
+    private int locationType;
+    private Integer parentStation;
     private String stopName, stopDesk, zoneId, stopURL;
     private GPSLocation gpsLocation;
 
 
 
     public Stop(String line){
-        Matcher matcher = PATTERN.matcher(line);
+        Matcher matcher = Patterns.STOP_PATTERN.matcher(line);
         if(!matcher.matches()){
             throw new IllegalArgumentException("line passed in to stop, formatted incorrectly <"+line+">");
         }
@@ -62,7 +64,7 @@ public class Stop {
         zoneId = matcher.group(7);
         stopURL = matcher.group(8);
         locationType = Integer.parseInt(matcher.group(9));
-        parentStation = Integer.parseInt(matcher.group(10));
+        parentStation = matcher.group(10).length()>0? Integer.parseInt(matcher.group(10)):null;
         STOP_HASHTABLE.put(id,this);
     }
 }

@@ -28,7 +28,7 @@ public class RunSearch implements Runnable{
         while(!schedule.ready) System.out.println("waiting on schedule");
         while (true){
             while(ready || start==null || end==null){
-                System.out.println("waiting on solection");
+                System.out.println("waiting on sollection");
             }
         }
     }

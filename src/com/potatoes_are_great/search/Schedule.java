@@ -21,7 +21,9 @@ public class Schedule {
             while ((line = reader.readLine())!=null) {
                 try {
                     addLine(line);
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException ignored) {
+                    System.out.println("Schedule:"+line);
+                }
             }
             reader.close();
             ready = true;
