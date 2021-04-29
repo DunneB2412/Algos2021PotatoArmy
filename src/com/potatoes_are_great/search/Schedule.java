@@ -2,8 +2,9 @@ package com.potatoes_are_great.search;
 
 import java.io.*;
 import java.util.Hashtable;
+import java.util.Iterator;
 
-public class Schedule {
+public class Schedule implements Iterable<Trip>{
     private Hashtable<Integer, Trip> trips;
     boolean ready;
     public Schedule(File file){
@@ -45,4 +46,8 @@ public class Schedule {
     }
 
 
+    @Override
+    public Iterator<Trip> iterator() {
+        return trips.values().iterator();
+    }
 }

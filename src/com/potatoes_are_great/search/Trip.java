@@ -34,16 +34,23 @@ public class Trip implements Iterable<Stop>{
     public void add(String line){
         assert getId(line)!=this.id: "line should only be added to a trip with the same id";
         Matcher matcher = Patterns.TRIP_PATTERN.matcher(line);
-        //we already know the matcher matches by now.
-        if(!matcher.matches()){
-            throw new IllegalArgumentException("oof");
-        }
-        Time[] time = new Time[]{Patterns.getTimeFromPattern(matcher.group(2)),Patterns.getTimeFromPattern(matcher.group(3))};
+
+        matcher.matches();//we already know the matcher matches by now. unfortunately this is needed to form the groups
+
+        Time arrival = Time.getTimeFromPattern(matcher.group(2), Patterns.TIME_PATTERN);
+        Time departure = Time.getTimeFromPattern(matcher.group(3), Patterns.TIME_PATTERN);
+        Time[] time = new Time[]{arrival, departure};
         this.times.add(time);
-        stops.add(Stop.getFromId(Integer.parseInt(matcher.group(4))));
+        Stop stop = Stop.getFromId(Integer.parseInt(matcher.group(4)));
+        stops.add(stop);
+        stop.RegisterTrip(this);
         Integer[] pDType = new Integer[]{Integer.parseInt(matcher.group(7)),Integer.parseInt(matcher.group(8))};
         this.pDTypes.add(pDType);
         dist.add(matcher.group(9).length()>0? Double.parseDouble(matcher.group(9)):0);
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
@@ -53,6 +60,17 @@ public class Trip implements Iterable<Stop>{
 
     public boolean contains(Stop stop){
         return stops.contains(stop);
+    }
+
+    public double getTrueDistance(Stop a, Stop b){
+        if(contains(a)&&contains(b)){
+            int ia = stops.indexOf(a);
+            int ib = stops.indexOf(b);
+            if(ia<=ib){
+                return dist.get(ib)-dist.get(ia);
+            }
+        }
+        return Double.POSITIVE_INFINITY;
     }
 
     public Time[] getTimeWindow(){

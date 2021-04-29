@@ -14,6 +14,13 @@ public class Main {
         Stop.prepare(new File(path+"stops.txt"));
         Schedule schedule = new Schedule(new File(path+"stop_times.txt"));
         RunSearch run = new RunSearch(schedule);
+
+
+        run.setStart(Stop.getRandom());
+        run.setEnd(Stop.getRandom());
+
         run.run();
+
+        System.out.println(run.getPlan().getId());
     }
 }

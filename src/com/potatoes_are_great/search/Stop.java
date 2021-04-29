@@ -3,11 +3,13 @@ package com.potatoes_are_great.search;
 import com.potatoes_are_great.utill.Patterns;
 
 import java.io.*;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class Stop {
+public class Stop implements Iterable<Trip>{
     private static final Hashtable<Integer, Stop> STOP_HASHTABLE = new Hashtable<>();
     private static boolean ready = true;
     public static boolean isReady(){
@@ -33,7 +35,11 @@ public class Stop {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    public static Stop getRandom() {
+        Object[] arr = STOP_HASHTABLE.values().toArray();
+        return (Stop) arr[Math.abs(new Random().nextInt())%arr.length];
     }
 
     public static boolean contains(Stop stop){
@@ -48,6 +54,7 @@ public class Stop {
     private Integer parentStation;
     private String stopName, stopDesk, zoneId, stopURL;
     private GPSLocation gpsLocation;
+    private HashSet<Trip> trips;
 
 
 
@@ -66,5 +73,15 @@ public class Stop {
         locationType = Integer.parseInt(matcher.group(9));
         parentStation = matcher.group(10).length()>0? Integer.parseInt(matcher.group(10)):null;
         STOP_HASHTABLE.put(id,this);
+        trips = new HashSet<>();
+    }
+
+    public void RegisterTrip(Trip trip){
+        trips.add(trip);
+    }
+
+    @Override
+    public Iterator<Trip> iterator() {
+        return trips.iterator();
     }
 }
