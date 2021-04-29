@@ -54,7 +54,7 @@ public class GUI implements ActionListener {
 		mainMenu.setLocationRelativeTo(null);
 	
 		
-		
+		//hello
 	}
 	
 	public void createArrivalTime(JPanel panel)
