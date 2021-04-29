@@ -43,7 +43,14 @@ public class RunSearch implements Runnable{
             if(!started){
                 setUp();
             }
-            while(ready || start==null || end==null);
+            while(ready || start==null || end==null){
+                System.out.println("waiting");
+//                try {
+//                    this.wait(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+            }
 
         }
     }
