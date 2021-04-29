@@ -14,6 +14,7 @@ public class Trip implements Iterable<Stop>{
     public static int getId(String line){
         Matcher matcher = PATTERN.matcher(line);
         if(!matcher.matches()){
+            //return null;
             throw new IllegalArgumentException("invalid line <"+line+"> as input for trip");
         }
         return Integer.parseInt(matcher.group(1));

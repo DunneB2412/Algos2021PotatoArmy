@@ -1,3 +1,4 @@
+package com.potatoes_are_great;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

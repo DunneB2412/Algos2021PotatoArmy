@@ -1,3 +1,5 @@
+package com.potatoes_are_great;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
