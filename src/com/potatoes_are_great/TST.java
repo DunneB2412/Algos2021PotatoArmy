@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
+/**
+ * remodified of Sedgwick’s class TST.
+ *
+ * @author TIANZE ZHANG
+ */
 
 
 public class TST<Value> {
@@ -146,7 +150,7 @@ public class TST<Value> {
         collect(x.right, prefix, queue);
     }
 
-
+//return TST containing all the stop names
     public static TST getStopsInTST() {
         int i=0;
 
@@ -175,7 +179,7 @@ public class TST<Value> {
         }
         return st;
     }
-
+//testing
     public static void main(String[] args){
         TST<String>st = getStopsInTST();
         System.out.println("Test1");
