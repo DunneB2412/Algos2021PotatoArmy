@@ -8,13 +8,23 @@ public class GUI implements ActionListener {
 	
 	//global variables, ones that will change via actions e.g. screens
 	JFrame mainMenu, shortPath, busName, arrival;
-
+	
+	//Text Fields
+	JTextField busStop1, busStop2, userText;
+	
+	//Formatted Fields
+	JFormattedTextField userHours, userMinutes, userSeconds;
+	
+	//Text Areas
+	JTextArea systemDisplay1, systemDisplay2, systemDisplay3;
 	
 	//buttons go here
-	JButton shortestPathB, busNameB, arrivalsB, quitB, goBackB1, goBackB2, goBackB3;
+	JButton shortestPathB, busNameB, arrivalsB, quitB; 
+	JButton goBackB1, goBackB2, goBackB3, runB1, runB2, runB3;
 	
 	//User interface is created here
 	//i.e. screens, buttons, settings etc
+	//main menu is here as well
 	public GUI() 
 	{
 		mainMenu = new JFrame();
@@ -43,7 +53,6 @@ public class GUI implements ActionListener {
 		
 		
 		//settings for frame. Layout, size, location etc
-		
 		mainMenu.add(panel, BorderLayout.CENTER);
 		mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainMenu.setTitle("Menu");
@@ -65,26 +74,28 @@ public class GUI implements ActionListener {
 		JLabel minText = new JLabel("Minutes");
 		JLabel secText = new JLabel("Seconds");
 		
-		JFormattedTextField userHours = new JFormattedTextField(createFormatter("##"));
-		userHours.setToolTipText("Press Enter to run");
+		userHours = new JFormattedTextField(createFormatter("##"));
+		userHours.setToolTipText("Format is 2 numbers i.e. 02 == 2");
 		userHours.setPreferredSize(new Dimension(30, 30));
 		
-		JFormattedTextField userMinutes = new JFormattedTextField(createFormatter("##"));
-		userMinutes.setToolTipText("Press Enter to run");
+		userMinutes = new JFormattedTextField(createFormatter("##"));
+		userMinutes.setToolTipText("Format is 2 numbers i.e. 02 == 2");
 		userMinutes.setPreferredSize(new Dimension(30, 30));
 		
-		JFormattedTextField userSeconds = new JFormattedTextField(createFormatter("##"));
-		userSeconds.setToolTipText("Press Enter to run");
+		userSeconds = new JFormattedTextField(createFormatter("##"));
+		userSeconds.setToolTipText("Format is 2 numbers i.e. 02 == 2");
 		userSeconds.setPreferredSize(new Dimension(30, 30));
 		
 		//An area where we can display results
-		JTextArea systemDisplay = new JTextArea("System will output here");
-		systemDisplay.setEditable(false);
-		systemDisplay.setLineWrap(true);
+		systemDisplay3 = new JTextArea("System will output here");
+		systemDisplay3.setEditable(false);
+		systemDisplay3.setLineWrap(true);
 		//Allows user to scroll through them 
-		JScrollPane areaScrollPane = new JScrollPane(systemDisplay);
-		areaScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane areaScrollPane = new JScrollPane(systemDisplay3);
+		areaScrollPane.setVerticalScrollBarPolicy(
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		areaScrollPane.setHorizontalScrollBarPolicy(
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		areaScrollPane.setPreferredSize(new Dimension(500, 500));
 		
 		panel.setLayout(new FlowLayout());
@@ -96,6 +107,7 @@ public class GUI implements ActionListener {
 		panel.add(userMinutes);
 		panel.add(secText);
 		panel.add(userSeconds);
+		panel.add(runB3);
 		panel.add(areaScrollPane);
 		panel.add(goBackB3);
 		
@@ -111,31 +123,35 @@ public class GUI implements ActionListener {
 		arrival.setLocationRelativeTo(null);
 	}
 	
+	
 	public void createBusName(JPanel panel)
 	{
 		//create extra components here
 		
-		JTextField userText = new JTextField("Please enter the bus name here", 30);
+		userText = new JTextField("Please enter the bus name here", 30);
 		userText.setToolTipText("press Enter to run");
 		
 		//An area where we can display results
-		JTextArea systemDisplay = new JTextArea("System will output here");
-		systemDisplay.setEditable(false);
-		systemDisplay.setLineWrap(true);
+		systemDisplay2 = new JTextArea("System will output here");
+		systemDisplay2.setEditable(false);
+		systemDisplay2.setLineWrap(true);
 		//Allows user to scroll through them 
-		JScrollPane areaScrollPane = new JScrollPane(systemDisplay);
-		areaScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		JScrollPane areaScrollPane = new JScrollPane(systemDisplay2);
+		areaScrollPane.setVerticalScrollBarPolicy( 
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		areaScrollPane.setHorizontalScrollBarPolicy(
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		areaScrollPane.setPreferredSize(new Dimension(500, 500));
 
-		
+
 		//panel settings, stuff on the window
 		panel.setLayout(new FlowLayout());
 		//add components here 
 		panel.add(userText);
+		panel.add(runB2);
 		panel.add(areaScrollPane);
 		panel.add(goBackB2);
-				
+		
 		//window settings 
 		busName.add(panel, BorderLayout.CENTER);
 		busName.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -150,19 +166,20 @@ public class GUI implements ActionListener {
 	public void createShortPath(JPanel panel)
 	{
 		
+		
 		//create extra components 
-		JTextField busStop1 = new JTextField("Please enter bus stop 1 here", 15);
+		busStop1 = new JTextField("Please enter bus stop 1 here", 18);
 		busStop1.setToolTipText("press Enter to run");
 		
-		JTextField busStop2 = new JTextField("Please enter bus stop 2 here", 15);
+		busStop2 = new JTextField("Please enter bus stop 2 here", 18);
 		busStop2.setToolTipText("press Enter to run");
 		
 		//An area where we can display results
-		JTextArea systemDisplay = new JTextArea("System will output here");
-		systemDisplay.setEditable(false);
-		systemDisplay.setLineWrap(true);
+		systemDisplay1 = new JTextArea("System will output here");
+		systemDisplay1.setEditable(false);
+		systemDisplay1.setLineWrap(true);
 		//Allows user to scroll through them 
-		JScrollPane areaScrollPane = new JScrollPane(systemDisplay);
+		JScrollPane areaScrollPane = new JScrollPane(systemDisplay1);
 		areaScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		areaScrollPane.setPreferredSize(new Dimension(500, 500));
@@ -174,6 +191,7 @@ public class GUI implements ActionListener {
 		//add components here
 		panel.add(busStop1);
 		panel.add(busStop2);
+		panel.add(runB1);
 	//	panel.add(systemDisplay);
 		panel.add(areaScrollPane);
 		panel.add(goBackB1);
@@ -189,6 +207,7 @@ public class GUI implements ActionListener {
 		shortPath.setLocationRelativeTo(null);
 		
 	}
+	
 	
 	public void createButtons()
 	{
@@ -219,7 +238,21 @@ public class GUI implements ActionListener {
 		goBackB3 = new JButton("Go back to Main Menu");
 		goBackB3.addActionListener(this);
 		goBackB3.setActionCommand("Go Back");
+		
+		runB1 = new JButton("Enter");
+		runB1.addActionListener(this);
+		runB1.setActionCommand("Shortest Path");
+		
+		runB2 = new JButton("Enter");
+		runB2.addActionListener(this);
+		runB2.setActionCommand("Bus Name Search");
+		
+		runB3 = new JButton("Enter");
+		runB3.addActionListener(this);
+		runB3.setActionCommand("Arrival Times");
+		
 	}
+	
 	
 	public static void main(String[] args) 
 	{
@@ -232,6 +265,7 @@ public class GUI implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
+		//for switching screens
 		switch(e.getActionCommand())
 		{		
 		case "Short Path":
@@ -258,12 +292,70 @@ public class GUI implements ActionListener {
 			busName.setVisible(false);
 			arrival.setVisible(false);
 			break;
-		default: break;
+		default: break;		
+		}
 		
+		//seperate block for the complicated programs
+		if(e.getActionCommand() == "Shortest Path")
+		{
+			String stop1 = busStop1.getText();
+			String stop2 = busStop2.getText();
+			systemDisplay1.setText(stop1+" is nowhere near "+stop2);
+		}
+		else if(e.getActionCommand() == "Bus Name Search")
+		{
+			String input = userText.getText();
+			systemDisplay2.setText(input);
+			
+			System.out.println("bus names are not here");
+		}
+		else if(e.getActionCommand() == "Arrival Times")
+		{
+			//postfix of T represents that they're in text form
+			
+			String hoursT = userHours.getText();
+			String minutesT = userMinutes.getText();
+			String secondsT = userSeconds.getText();
+			
+			int hours = 0;
+			int minutes = 0;
+			int seconds = 0;
+	        try
+	        {
+	            hours = Integer.parseInt(hoursT); 
+	            minutes = Integer.parseInt(minutesT);
+	            seconds = Integer.parseInt(secondsT);
+	        }
+	        catch (NumberFormatException ex) 
+	        {
+	            ex.printStackTrace();
+	        }
+			
+			if(IsErrorArrivals(hours, minutes, seconds) == false)
+			{
+				systemDisplay3.setText(hours +":"+minutes+":"+seconds);
+			}
+			else 
+			{
+				systemDisplay3.setText("Please enter a valid range");
+
+			}
+			
 		}
 		
 	}
 	
+	public boolean IsErrorArrivals(int hours, int minutes, int seconds)
+	{
+		if((hours > 23) || (hours <0)) return true;
+		else if((minutes > 59) || (minutes < 0)) return true;
+		else if((seconds > 59) || (seconds <0)) return true;
+		else System.out.println("Time is good");
+			
+		return false;
+	}
+	
+	//used to allow only numbers to be entered for arrival times
 	protected MaskFormatter createFormatter(String s) {
 	    MaskFormatter formatter = null;
 	    try {
