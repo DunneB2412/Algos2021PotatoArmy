@@ -1,5 +1,6 @@
 package com.potatoes_are_great.search;
 
+import java.io.*;
 import java.util.Hashtable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +8,32 @@ import java.util.regex.Pattern;
 public class Stop {
     private static final Pattern PATTERN = Pattern.compile("(\\d+),(\\d+),(.+),(.+),(-?\\d\\d\\d?.\\d*),(-?\\d\\d\\d?.\\d*),([A-Z][A-Z]\\s\\d\\d),(.*),(\\d),(\\d*)");
     private static final Hashtable<Integer, Stop> STOP_HASHTABLE = new Hashtable<>();
+    private static boolean ready = true;
+    public static boolean isReady(){
+        return ready;
+    }
+
+    public static void prepare(File file){
+        ready = false;
+        STOP_HASHTABLE.clear();
+        try {
+            ready = true;
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            while ((line = reader.readLine())!=null){
+                try {
+                    new Stop(line);
+                }catch (Exception ignored){
+
+                }
+            }
+            reader.close();
+            ready = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public static boolean contains(Stop stop){
         return STOP_HASHTABLE.contains(stop);

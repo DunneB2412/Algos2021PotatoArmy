@@ -15,6 +15,7 @@ public class Schedule {
 
     private void setUp(File file) {
         try {
+            while (!Stop.isReady());
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine())!=null) {

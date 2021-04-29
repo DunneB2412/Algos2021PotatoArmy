@@ -25,9 +25,10 @@ public class RunSearch implements Runnable{
 
     @Override
     public void run() {
+        while(!schedule.ready) System.out.println("waiting on schedule");
         while (true){
             while(ready || start==null || end==null){
-                System.out.println("waiting");
+                System.out.println("waiting on solection");
             }
         }
     }
