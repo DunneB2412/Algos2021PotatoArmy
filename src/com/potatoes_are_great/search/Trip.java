@@ -1,18 +1,18 @@
 package com.potatoes_are_great.search;
 
-import java.sql.Time;
+import com.potatoes_are_great.utill.Patterns;
+import com.potatoes_are_great.utill.Time;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Trip implements Iterable<Stop>{
-    private static final Pattern PATTERN = Pattern.compile("(\\d+),(\\d+),(\\d\\d?:\\d\\d:\\d\\d),(\\d\\d?:\\d\\d:\\d\\d),(\\d+),(.*),(\\d),(\\d),(\\d*.?\\d*)"); //TODO repair last parretn
 
     public static int getId(String line){
-        Matcher matcher = PATTERN.matcher(line);
+        Matcher matcher = Patterns.TRIP_PATTERN.matcher(line);
         if(!matcher.matches()){
             //return null;
             throw new IllegalArgumentException("invalid line <"+line+"> as input for trip");
@@ -33,9 +33,12 @@ public class Trip implements Iterable<Stop>{
 
     public void add(String line){
         assert getId(line)!=this.id: "line should only be added to a trip with the same id";
-        Matcher matcher = PATTERN.matcher(line);
+        Matcher matcher = Patterns.TRIP_PATTERN.matcher(line);
         //we already know the matcher matches by now.
-        Time[] time = new Time[]{Time.valueOf(matcher.group(2)),Time.valueOf(matcher.group(3))};
+        if(!matcher.matches()){
+            throw new IllegalArgumentException("oof");
+        }
+        Time[] time = new Time[]{Patterns.getTimeFromPattern(matcher.group(2)),Patterns.getTimeFromPattern(matcher.group(3))};
         this.times.add(time);
         stops.add(Stop.getFromId(Integer.parseInt(matcher.group(4))));
         Integer[] pDType = new Integer[]{Integer.parseInt(matcher.group(7)),Integer.parseInt(matcher.group(8))};
