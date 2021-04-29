@@ -54,7 +54,7 @@ public class GUI implements ActionListener {
 		mainMenu.setLocationRelativeTo(null);
 	
 		
-		//hello
+		
 	}
 	
 	public void createArrivalTime(JPanel panel)
@@ -77,6 +77,16 @@ public class GUI implements ActionListener {
 		userSeconds.setToolTipText("Press Enter to run");
 		userSeconds.setPreferredSize(new Dimension(30, 30));
 		
+		//An area where we can display results
+		JTextArea systemDisplay = new JTextArea("System will output here");
+		systemDisplay.setEditable(false);
+		systemDisplay.setLineWrap(true);
+		//Allows user to scroll through them 
+		JScrollPane areaScrollPane = new JScrollPane(systemDisplay);
+		areaScrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		areaScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		areaScrollPane.setPreferredSize(new Dimension(500, 500));
+		
 		panel.setLayout(new FlowLayout());
 		//add components here 
 		
@@ -86,6 +96,7 @@ public class GUI implements ActionListener {
 		panel.add(userMinutes);
 		panel.add(secText);
 		panel.add(userSeconds);
+		panel.add(areaScrollPane);
 		panel.add(goBackB3);
 		
 		
