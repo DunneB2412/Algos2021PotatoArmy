@@ -1,17 +1,10 @@
-package com.potatoes_are_great;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 /**
- * remodified of Sedgwick’s class TST.
+ * Simplied version of Sedgwick’s class.
  *
  * @author TIANZE ZHANG
  */
-
-
 public class TST<Value> {
+
     private int n;              // size
     private Node<Value> root;   // root of TST
 
@@ -150,43 +143,4 @@ public class TST<Value> {
         collect(x.right, prefix, queue);
     }
 
-//return TST containing all the stop names
-    public static TST getStopsInTST() {
-        int i=0;
-
-        TST<Integer> st = new TST<>();
-        try (BufferedReader br = new BufferedReader(new FileReader("stops.txt"))) {
-            String line;
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-
-                String[] stop=line.split(",");
-                String stopName= stop[2];
-                String[] stopNameSplited=stopName.split(" ");
-                String firstStr = stopNameSplited[0];
-                StringBuilder modifiedStop= new StringBuilder();
-                for(int j=1;j<stopNameSplited.length;j++){
-                    modifiedStop.append(stopNameSplited[j]);
-                    modifiedStop.append(" ");
-                }
-                modifiedStop.append(firstStr);
-                st.put(modifiedStop.toString(), i);
-                i++;
-            }
-        }catch (FileNotFoundException e) {
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return st;
-    }
-//testing
-    public static void main(String[] args){
-        TST<String>st = getStopsInTST();
-        System.out.println("Test1");
-        for (String s : st.keysWithPrefix("KINGSWAY AVE N"))
-            System.out.println(s);
-        System.out.println("Test2");
-        for (String s : st.keysWithPrefix("DAVID AVE FS KINGSTON ST"))
-            System.out.println(s);
-    }
 }

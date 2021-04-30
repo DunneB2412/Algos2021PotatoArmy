@@ -1,12 +1,11 @@
-package com.potatoes_are_great;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 /**
- * Queue implementation from Sedgwick.
+ * Sedgwick’s class.
  *
  * @author TIANZE ZHANG
  */
+
 public class Queue<Item> implements Iterable<Item> {
     private Node<Item> first;    // beginning of queue
     private Node<Item> last;     // end of queue
