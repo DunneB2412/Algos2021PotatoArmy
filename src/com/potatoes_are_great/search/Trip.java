@@ -73,6 +73,19 @@ public class Trip implements Iterable<Stop>{
         return Double.POSITIVE_INFINITY;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Trip){
+            Trip t = (Trip) obj;
+            if(t.id == id) return true;
+            for (int i = 0; i < stops.size(); i++) {
+                if(stops.get(i).equals(t.stops.get(i)));
+            }
+            return true;
+        }
+        return false;
+    }
+
     public Time[] getTimeWindow(){
         return new Time[]{times.get(0)[0],times.get(times.size()-1)[1]};
     }

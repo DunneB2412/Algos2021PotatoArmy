@@ -48,10 +48,10 @@ public class RunSearch implements Runnable{
 
     @Override
     public void run() {
-        while(!schedule.ready) System.out.println("waiting on schedule");
+        while(!schedule.ready);// System.out.println("waiting on schedule");
         //while (true){
         while(ready || start==null || end==null){
-            System.out.println("waiting on sollection");
+            //System.out.println("waiting on sollection");
         }
         //if(schedule.ready && !ready && start!=null && end!=null){
             generatePlan();
@@ -59,23 +59,16 @@ public class RunSearch implements Runnable{
     }
 
     private void generatePlan() {
-        for (Trip trip: start) {
-            if(trip.contains(start)){
-                System.out.println("s");
-            }
-            if(trip.contains(end)){
-                System.out.println(end);
-            }
-            if(trip.getTrueDistance(start,end)<Double.POSITIVE_INFINITY){
-                System.out.println("found");
-                ready = true;
+        double min = Double.POSITIVE_INFINITY;
+        for(Trip trip: start){
+            if(trip.getTrueDistance(start,end)<min){
                 plan = trip;
             }
         }
-        //TODO try using something like a web.
-
+        ready = true;
     }
-    /*
+
+    private void astarSearch(){
         HashSet<Trip> visited = new HashSet<>();
         PriorityQueue<Node> queue = new PriorityQueue<>();
         for (Trip trip: start) {
@@ -144,14 +137,16 @@ public class RunSearch implements Runnable{
 
         public ArrayList<Node> getChildren(){
             ArrayList<Node> out = new ArrayList<>();
-            boolean reachedStop = false;
-            for (Stop stop: trip) {
-                if(stop.equals(this.stop)){
-                    reachedStop = true;
-                }else if(reachedStop){
-                    for (Trip trip: stop) {
-                        if(trip!=this.trip){
-                            out.add( new Node(trip, stop, this, depth+1,distance+this.trip.getTrueDistance(this.stop, stop)));
+            if(depth<3){
+                boolean reachedStop = false;
+                for (Stop stop: trip) {
+                    if(stop.equals(this.stop)){
+                        reachedStop = true;
+                    }else if(reachedStop){
+                        for (Trip trip: stop) {
+                            if(trip!=this.trip){
+                                out.add( new Node(trip, stop, this, depth+1,distance+this.trip.getTrueDistance(this.stop, stop)));
+                            }
                         }
                     }
                 }
@@ -162,5 +157,5 @@ public class RunSearch implements Runnable{
         public boolean is(Stop end) {
             return stop.equals(end);
         }
-    }*/
+    }
 }
