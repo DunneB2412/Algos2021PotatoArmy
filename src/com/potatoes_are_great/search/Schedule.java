@@ -4,6 +4,9 @@ import java.io.*;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+/**
+ * @author duneb5
+ */
 public class Schedule implements Iterable<Trip>{
     private Hashtable<Integer, Trip> trips;
     boolean ready;

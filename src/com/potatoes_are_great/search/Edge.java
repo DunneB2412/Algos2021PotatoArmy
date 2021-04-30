@@ -5,6 +5,9 @@ import com.potatoes_are_great.utill.Patterns;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author duneb5
+ */
 public class Edge {
     public final Stop a, b;
     public final int type;

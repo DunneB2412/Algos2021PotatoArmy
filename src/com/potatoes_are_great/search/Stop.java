@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.regex.Matcher;
 
+/**
+ * @author duneb5
+ */
 public class Stop implements Iterable<Trip>{
     private static final Hashtable<Integer, Stop> STOP_HASHTABLE = new Hashtable<>();
     private static boolean ready = true;

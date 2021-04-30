@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
+/**
+ * @author duneb5
+ */
 public class RunSearch implements Runnable{
 
     private boolean ready;

@@ -6,6 +6,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 
+/**
+ * @author seckersl
+ */
 public class GUI implements ActionListener {
 	
 	//global variables, ones that will change via actions e.g. screens

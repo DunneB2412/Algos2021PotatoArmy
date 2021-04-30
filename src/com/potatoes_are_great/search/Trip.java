@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 
-
+/**
+ * @author duneb5
+ */
 public class Trip implements Iterable<Stop>{
 
     public static int getId(String line){

@@ -4,6 +4,9 @@ package com.potatoes_are_great.utill;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author duneb5
+ */
 public class Time implements Comparable<Time>{
 
     public static Time getTimeFromPattern(String line, Pattern pattern){

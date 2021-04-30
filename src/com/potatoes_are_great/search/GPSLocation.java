@@ -1,6 +1,8 @@
 package com.potatoes_are_great.search;
 
-public class GPSLocation {
+/**
+ * @author duneb5
+ */public class GPSLocation {
     private final double latitude, longitude;
 
     public GPSLocation(double latitude, double longitude) {
