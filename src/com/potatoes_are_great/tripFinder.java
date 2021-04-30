@@ -90,7 +90,6 @@ public class tripFinder {
 			    		}
 			    	}
 			        
-			        //TODO correctly parse the times
 			        tripID[currentLine] = Integer.parseInt(data[0]);
 			        
 			        //converts the arrival time string into an int with the format "hhmmss"
@@ -105,7 +104,7 @@ public class tripFinder {
 			        seconds = Integer.parseInt(timeStr[2]);
 					arrivalTimes[currentLine] = (hours*10000) + (minutes*100) + seconds;
 					
-					//converts the arrival time string into an int with the format "hhmmss"
+					//converts the departure time string into an int with the format "hhmmss"
 					timeStr = data[2].split(":");
 			        //ensures theres no invalid times such as 27
 					 //replaces " " with 0
@@ -133,45 +132,14 @@ public class tripFinder {
 		}
 	}
 	
-	//TODO
 	//finds the trips with a given arrival time
 	public tripsInfo findTrips(int time) {
 		
-		//finds all indexes with the time given and creates a temp tripID array
-		ArrayList<Integer> matchingTimesIndex = new ArrayList<Integer>();
-		ArrayList<Integer> tempTripID = new ArrayList<Integer>();
-		boolean exists = false;
-		for(int i = 0; i < arrivalTimes.length; i++) {
-			 if(arrivalTimes[i] == time) {
-				 matchingTimesIndex.add(i);
-				 tempTripID.add(tripID[i]);
-				 exists = true;
-			 }
-		}
+		ArrayList<Integer> matchingTimesIndex = findMatchingTimesindexes(arrivalTimes, time);
 		
-		//checks that an arrival time exists
-		if(!exists) {
+		if(matchingTimesIndex == null) {
 			return null;
 		}
-		
-		
-		//sorts the matchingTimesIndex by its tripID
-		int tmp;
-    	int aLength = tempTripID.size();
-        for(int i = 1; i < aLength; i++) {
-        	for(int j = i; j > 0; j--) {
-        		if(tempTripID.get(j) < tempTripID.get(j-1)) {
-        			tmp = tempTripID.get(j);
-        			tempTripID.set(j, tempTripID.get(j-1));
-        			tempTripID.set(j-1, tmp);
-        			
-        			//also sorts matchingTimesIndex by the tripId
-        			tmp = matchingTimesIndex.get(j);
-        			matchingTimesIndex.set(j, matchingTimesIndex.get(j-1));
-        			matchingTimesIndex.set(j-1, tmp);
-        		}
-        	}
-        }
 		
 		ArrayList<Integer> tripIDTmp = new ArrayList<Integer>();
 		ArrayList<Integer> arrivalTimesTmp  = new ArrayList<Integer>();
@@ -182,7 +150,7 @@ public class tripFinder {
 		ArrayList<Integer> dropoffTypeTmp = new ArrayList<Integer>();
 		ArrayList<Double> distTravelledTmp = new ArrayList<Double>();
 		
-		//adds all the the preceding stops in a trip to the temp arraylists in ascending order
+		//adds all the the stops in a trip and add them to the temp arraylists in ascending order
 		for(int i = 0; i < matchingTimesIndex.size(); i++) {
 			int currenttripID = tripID[matchingTimesIndex.get(i)];
 			int endOfTripIndex = matchingTimesIndex.get(i);
@@ -194,7 +162,8 @@ public class tripFinder {
 			
 			//fixes the index
 			endOfTripIndex = endOfTripIndex - 1;
-						
+				
+			// adds the entirety of the trip to the arrayList ordered
 			for(int j = stopSequence[endOfTripIndex] - 1; j >= 0; j--) {
 				tripIDTmp.add(tripID[endOfTripIndex - j]);
 				arrivalTimesTmp.add(arrivalTimes[endOfTripIndex - j]);
@@ -214,5 +183,55 @@ public class tripFinder {
 		
 	}
 	
+	// Finds all the indexes of the matching times and returns them ordered by their tripID
+	private ArrayList<Integer> findMatchingTimesindexes(int times[], int time){
+		
+		ArrayList<Integer> matchingTimesIndex = new ArrayList<Integer>();
+		ArrayList<Integer> tempTripID = new ArrayList<Integer>();
+		boolean exists = false;
+		for(int i = 0; i < times.length; i++) {
+			 if(times[i] == time) {
+				 matchingTimesIndex.add(i);
+				 tempTripID.add(tripID[i]);
+				 exists = true;
+			 }
+		}
+		
+		//checks that an arrival time exists
+				if(!exists) {
+					return null;
+				}
+				else {
+					matchingTimesIndex = sortByTripID(tempTripID , matchingTimesIndex);
+				}
+				
+				return matchingTimesIndex;
+		
+	}
+	 // sorts the matchingTimesIndex by its corresponding trip ID
+	private ArrayList<Integer> sortByTripID(ArrayList<Integer> tempTripID, ArrayList<Integer> matchingTimesIndex){
+		
+		int tmp;
+    	int aLength = tempTripID.size();
+        for(int i = 1; i < aLength; i++) {
+        	for(int j = i; j > 0; j--) {
+        		if(tempTripID.get(j) < tempTripID.get(j-1)) {
+        			tmp = tempTripID.get(j);
+        			tempTripID.set(j, tempTripID.get(j-1));
+        			tempTripID.set(j-1, tmp);
+        			
+        			//also sorts matchingTimesIndex by the tripId
+        			tmp = matchingTimesIndex.get(j);
+        			matchingTimesIndex.set(j, matchingTimesIndex.get(j-1));
+        			matchingTimesIndex.set(j-1, tmp);
+        		}
+        	}
+        }
+        
+        return matchingTimesIndex;
+		
+	}
+	
 }
+
 
