@@ -3,14 +3,10 @@ package com.potatoes_are_great;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.LineNumberReader;
-
-
-
+import java.util.ArrayList;
 
 
 public class tripFinder {
@@ -19,35 +15,11 @@ public class tripFinder {
 	int arrivalTimes[];
 	int departureTimes[];
 	int stopID[];
-	int stopHeadsign[];
+	int stopSequence[];
 	int pickupType[];
 	int dropoffType[];
 	double distTravelled[];
 	
-	//class to return all the data needed
-	public class tripsInfo{
-		public int tripID[];
-		public int arrivalTimes[];
-		public int departureTimes[];
-		public int stopID[];
-		public int stopHeadsign[];
-		public int pickupType[];
-		public int dropoffType[];
-		public double distTravelled[];
-		
-		public tripsInfo(int tripID[], int arrivalTimes[], int departureTimes[], int stopID[], int stopHeadsign[], int pickupType[],
-				int dropoffType[], double distTravelled[]) {
-			
-			this.tripID = tripID;
-			this.arrivalTimes = arrivalTimes;
-			this.departureTimes = departureTimes;
-			this.stopID = stopID;
-			this.stopHeadsign = stopHeadsign;
-			this.pickupType = pickupType;
-			this.dropoffType = dropoffType;
-			this.distTravelled = distTravelled;
-		}
-	}
 	
 	tripFinder() throws IOException{
 		
@@ -59,12 +31,12 @@ public class tripFinder {
 		arrivalTimes = new int[numberOfLines];
 		departureTimes = new int[numberOfLines];
 		stopID = new int[numberOfLines];
-		stopHeadsign = new int[numberOfLines];
+		stopSequence = new int[numberOfLines];
 		pickupType = new int[numberOfLines];
 		dropoffType = new int[numberOfLines];
 		distTravelled  = new double[numberOfLines];
 		
-		
+		readInData("stop_times.txt");
 		
 	}
 	
@@ -94,22 +66,66 @@ public class tripFinder {
 	
 	//reads in all the data
 	public void readInData(String filename) {
-		try(BufferedReader in = new BufferedReader(new FileReader("stop_times"))) {
+		
+		String timeStr[] = new String[3];
+		int hours;
+		int minutes;
+		int seconds;
+		
+		try(BufferedReader in = new BufferedReader(new FileReader(filename))) {
 		    String str;
 		    String data[] = new String[9];
 		    int currentLine = 0;
 		    while ((str = in.readLine()) != null) {
-		        data = str.split(",");
-		        
-		        //TODO correctly parse the times
-		        tripID[currentLine] = Integer.parseInt(data[0]);
-				arrivalTimes[currentLine] = Integer.parseInt(data[0]);
-				departureTimes[currentLine] = Integer.parseInt(data[0]);
-				stopID[currentLine] = Integer.parseInt(data[0]);
-				stopHeadsign[currentLine] = Integer.parseInt(data[0]);
-				pickupType[currentLine] = Integer.parseInt(data[0]);
-				dropoffType[currentLine] = Integer.parseInt(data[0]);
-				distTravelled[currentLine] = Integer.parseInt(data[0]);
+		    	
+		    	
+		       
+		    	//skips the fist line which is just the headers
+		    	if(currentLine != 0) {
+			    	data = str.split(",");
+			    	
+			    	for(int i = 0; i < data.length; i++) {
+			    		if(data[i] == null || data[i] == "") {
+			    			data[i] = "0";
+			    		}
+			    	}
+			        
+			        //TODO correctly parse the times
+			        tripID[currentLine] = Integer.parseInt(data[0]);
+			        
+			        //converts the arrival time string into an int with the format "hhmmss"
+			        timeStr = data[1].split(":");
+			        //ensures theres no invalid times such as 24
+			        //replaces " " with 0
+			        timeStr[0] = timeStr[0].replace(" ", "0");
+			        hours = (Integer.parseInt(timeStr[0])) % 24;
+			        timeStr[1] = timeStr[1].replace(" ", "0");
+			        minutes = Integer.parseInt(timeStr[1]);
+			        timeStr[2] = timeStr[2].replace(" ", "0");
+			        seconds = Integer.parseInt(timeStr[2]);
+					arrivalTimes[currentLine] = (hours*10000) + (minutes*100) + seconds;
+					
+					//converts the arrival time string into an int with the format "hhmmss"
+					timeStr = data[2].split(":");
+			        //ensures theres no invalid times such as 27
+					 //replaces " " with 0
+					timeStr[0] = timeStr[0].replace(" ", "0");
+			        hours = Integer.parseInt(timeStr[0]) % 24;
+			        timeStr[1] = timeStr[1].replace(" ", "0");
+			        minutes = Integer.parseInt(timeStr[1]);
+			        timeStr[2] = timeStr[2].replace(" ", "0");
+			        seconds = Integer.parseInt(timeStr[2]);
+			        departureTimes[currentLine] = (hours*10000) + (minutes*100) + seconds;
+					
+			        stopID[currentLine] = Integer.parseInt(data[3]);
+			        stopSequence[currentLine] = Integer.parseInt(data[4]);
+					pickupType[currentLine] = Integer.parseInt(data[6]);
+					dropoffType[currentLine] = Integer.parseInt(data[7]);
+					if(data.length == 9) {
+						distTravelled[currentLine] = Double.parseDouble(data[8]);
+					}
+		    	}
+				currentLine++;
 		    }
 		}
 		catch (IOException e) {
@@ -119,9 +135,84 @@ public class tripFinder {
 	
 	//TODO
 	//finds the trips with a given arrival time
-	public void findTrips(int time) {
+	public tripsInfo findTrips(int time) {
+		
+		//finds all indexes with the time given and creates a temp tripID array
+		ArrayList<Integer> matchingTimesIndex = new ArrayList<Integer>();
+		ArrayList<Integer> tempTripID = new ArrayList<Integer>();
+		boolean exists = false;
+		for(int i = 0; i < arrivalTimes.length; i++) {
+			 if(arrivalTimes[i] == time) {
+				 matchingTimesIndex.add(i);
+				 tempTripID.add(tripID[i]);
+				 exists = true;
+			 }
+		}
+		
+		//checks that an arrival time exists
+		if(!exists) {
+			return null;
+		}
+		
+		
+		//sorts the matchingTimesIndex by its tripID
+		int tmp;
+    	int aLength = tempTripID.size();
+        for(int i = 1; i < aLength; i++) {
+        	for(int j = i; j > 0; j--) {
+        		if(tempTripID.get(j) < tempTripID.get(j-1)) {
+        			tmp = tempTripID.get(j);
+        			tempTripID.set(j, tempTripID.get(j-1));
+        			tempTripID.set(j-1, tmp);
+        			
+        			//also sorts matchingTimesIndex by the tripId
+        			tmp = matchingTimesIndex.get(j);
+        			matchingTimesIndex.set(j, matchingTimesIndex.get(j-1));
+        			matchingTimesIndex.set(j-1, tmp);
+        		}
+        	}
+        }
+		
+		ArrayList<Integer> tripIDTmp = new ArrayList<Integer>();
+		ArrayList<Integer> arrivalTimesTmp  = new ArrayList<Integer>();
+		ArrayList<Integer> departureTimesTmp  = new ArrayList<Integer>();
+		ArrayList<Integer> stopIDTmp = new ArrayList<Integer>();
+		ArrayList<Integer> stopSequenceTmp = new ArrayList<Integer>();
+		ArrayList<Integer> pickupTypeTmp = new ArrayList<Integer>();
+		ArrayList<Integer> dropoffTypeTmp = new ArrayList<Integer>();
+		ArrayList<Double> distTravelledTmp = new ArrayList<Double>();
+		
+		//adds all the the preceding stops in a trip to the temp arraylists in ascending order
+		for(int i = 0; i < matchingTimesIndex.size(); i++) {
+			int currenttripID = tripID[matchingTimesIndex.get(i)];
+			int endOfTripIndex = matchingTimesIndex.get(i);
+			
+			//gets the end of the trips
+			while(tripID[endOfTripIndex] == currenttripID ) {
+				endOfTripIndex++;
+			}
+			
+			//fixes the index
+			endOfTripIndex = endOfTripIndex - 1;
+						
+			for(int j = stopSequence[endOfTripIndex] - 1; j >= 0; j--) {
+				tripIDTmp.add(tripID[endOfTripIndex - j]);
+				arrivalTimesTmp.add(arrivalTimes[endOfTripIndex - j]);
+				departureTimesTmp.add(departureTimes[endOfTripIndex - j]);
+				stopIDTmp.add(stopID[endOfTripIndex - j]);
+				stopSequenceTmp.add(stopSequence[endOfTripIndex - j]);
+				pickupTypeTmp.add(pickupType[endOfTripIndex - j]);
+				dropoffTypeTmp.add(dropoffType[endOfTripIndex - j]);
+				distTravelledTmp.add(distTravelled[endOfTripIndex - j]);
+			}
+		}
+		
+		tripsInfo returnable = new tripsInfo(tripIDTmp, arrivalTimesTmp, departureTimesTmp, stopIDTmp, stopSequenceTmp,
+				pickupTypeTmp, dropoffTypeTmp, distTravelledTmp);
+		
+		return returnable;
 		
 	}
-		
 	
 }
+
