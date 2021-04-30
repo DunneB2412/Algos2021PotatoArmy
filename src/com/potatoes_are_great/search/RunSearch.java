@@ -41,6 +41,9 @@ public class RunSearch implements Runnable{
     public Trip getPlan(){
         return plan;
     }
+    public boolean isReady(){
+        return ready;
+    }
 
 
     @Override
@@ -55,20 +58,47 @@ public class RunSearch implements Runnable{
         //}
     }
 
-    private void generatePlan(){
+    private void generatePlan() {
+        for (Trip trip: start) {
+            if(trip.contains(start)){
+                System.out.println("s");
+            }
+            if(trip.contains(end)){
+                System.out.println(end);
+            }
+            if(trip.getTrueDistance(start,end)<Double.POSITIVE_INFINITY){
+                System.out.println("found");
+                ready = true;
+                plan = trip;
+            }
+        }
+        //TODO try using something like a web.
+
+    }
+    /*
         HashSet<Trip> visited = new HashSet<>();
         PriorityQueue<Node> queue = new PriorityQueue<>();
-        Node current = new Node(null, start, null, 0, 0);
-        queue.add(current);
+        for (Trip trip: start) {
+            queue.add(new Node(trip,start, null,0,0));
+        }
+        Node current = queue.peek();
         while (!queue.isEmpty() && !(current = queue.poll()).is(end)){
-            if(visited.contains(current.trip)){
+            if(!visited.contains(current.trip)){
+                System.out.println(current.distance+","+current.stop.getGpsLocation().getDist(end.getGpsLocation())+"||"+queue.size()+":"+current.depth);
+                System.out.println();
                 visited.add(current.trip);
-                queue.addAll(current.getChildren());
+                for (Node node:current.getChildren()) {
+                    if (!visited.contains(node.trip)) {
+                        queue.add(node);
+                    }
+                }
             }
         }
         plan = new Trip(-1);
         while (current!=null){
-            plan.add
+
+            //plan.add(current.)
+            current = current.parent;
         }
     }
 
@@ -91,7 +121,11 @@ public class RunSearch implements Runnable{
 
 
         private double getHuristic(){
-            return 0;
+            double h = stop.getGpsLocation().getDist(stop.getGpsLocation());
+            if (this.trip.contains(end)){
+                h-=10;
+            }
+            return h*10;
         }
 
         @Override
@@ -128,5 +162,5 @@ public class RunSearch implements Runnable{
         public boolean is(Stop end) {
             return stop.equals(end);
         }
-    }
+    }*/
 }

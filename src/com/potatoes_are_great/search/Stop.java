@@ -49,7 +49,8 @@ public class Stop implements Iterable<Trip>{
         return STOP_HASHTABLE.get(id);
     }
 
-    private final int id, code;
+    private final int id;
+    private final Integer code;
     private int locationType;
     private Integer parentStation;
     private String stopName, stopDesk, zoneId, stopURL;
@@ -64,7 +65,8 @@ public class Stop implements Iterable<Trip>{
             throw new IllegalArgumentException("line passed in to stop, formatted incorrectly <"+line+">");
         }
         id = Integer.parseInt(matcher.group(1));
-        code = Integer.parseInt(matcher.group(2));
+        String codeS = matcher.group(2).replaceAll("\\s","");
+        code = codeS.length()>0? Integer.parseInt(codeS): null;
         stopName = matcher.group(3);
         stopDesk = matcher.group(4);
         gpsLocation = new GPSLocation(Double.parseDouble(matcher.group(5)),Double.parseDouble(matcher.group(6)));
@@ -83,5 +85,9 @@ public class Stop implements Iterable<Trip>{
     @Override
     public Iterator<Trip> iterator() {
         return trips.iterator();
+    }
+
+    public GPSLocation getGpsLocation(){
+        return gpsLocation;
     }
 }

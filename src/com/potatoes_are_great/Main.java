@@ -21,6 +21,7 @@ public class Main {
 
         run.run();
 
+        while(!run.isReady()) System.out.println("waiting");;
         System.out.println(run.getPlan().getId());
     }
 }

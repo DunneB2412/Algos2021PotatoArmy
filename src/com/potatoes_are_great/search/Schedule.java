@@ -11,7 +11,8 @@ public class Schedule implements Iterable<Trip>{
         trips = new Hashtable<>();
         ready = false;
         Schedule sc = this;
-        new Thread(() -> sc.setUp(file)).start();
+        setUp(file);
+        //new Thread(() -> sc.setUp(file)).start();
     }
 
     private void setUp(File file) {
